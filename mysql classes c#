@@ -1,0 +1,90 @@
+class Ad
+{
+    public int Area;
+    public int Floors;
+    public int Id;
+    public int Rooms;
+    public Category Category;
+    public Seller Seller;
+    public DateTime CreateAt;
+    public string Description;
+    public string ImageUrl;
+    public string LatLong;
+    public bool FreeOfCharge;
+    public Ad(string line)
+    {
+        string[] sz = line.Split(';');
+        this.Id = int.Parse(sz[0]);
+        this.Rooms = int.Parse(sz[1]);
+        this.LatLong = sz[2];
+        this.Floors = int.Parse(sz[3]);
+        this.Area = int.Parse(sz[4]);
+        this.Description = sz[5];
+        this.FreeOfCharge = sz[6] == "1";
+        this.ImageUrl = sz[7];
+        this.CreateAt = DateTime.Parse(sz[8]);
+        this.Seller = new Seller();
+        Seller.Id = int.Parse(sz[9]);
+        Seller.Name = sz[10];
+        Seller.Phone = sz[11];
+        this.Category = new Category();
+        Category.Id = int.Parse(sz[12]);
+        Category.Name = sz[13];
+    }
+    public static List<Ad> LoadFromCsv(string fileName)
+    {
+        string[] fileAdat = File.ReadAllLines(fileName, Encoding.UTF8).Skip(1).ToArray();
+        List<Ad> ad = new List<Ad>();
+        foreach (var item in fileAdat)
+        {
+            ad.Add(new Ad(item));
+        }
+        return ad;
+    }
+    public override string ToString()
+    {
+        return $"\tEladó neve: {Seller.Name}\n\tEladó telefonja: {Seller.Phone}\n\tAlapterület: {Area}\n\tSzobák száma: {Rooms}";
+    }
+}
+class Seller
+{
+    public int Id;
+    public string Name;
+    public string Phone;
+}
+class Category
+{
+    public int Id;
+    public string Name;
+}
+
+internal class Program
+{
+    static void Main(string[] args)
+    {
+        //5.feladat
+        List<Ad> adatok = Ad.LoadFromCsv("realestates.csv");
+
+
+        //földszinti ingatlanok átlagos alapterülete
+        int szumma = 0;
+        int db = 0;
+
+        foreach (Ad ad in adatok)
+        {
+            if (ad.Floors == 0)
+            { 
+                szumma += ad.Area;
+                db++;   
+            }
+        }
+        Console.WriteLine($"A földszinti ingatlanok átlagterülete {(double)szumma/db:0.00}m2");
+
+        //Kiírni a képernyőre az eladókat ABC sorrendben visszafelé
+
+        SortedSet <string> eladok = new SortedSet<string>();
+
+        foreach (var item in adatok) eladok.Add(item.Seller.Name);    
+        foreach (var item in eladok.Reverse()) Console.Write(item+", ");
+
+      
