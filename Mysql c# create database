@@ -2,7 +2,7 @@
  MySqlCommand command = new MySqlCommand("CREATE DATABASE if not exists --adatbázis neve--;", serverKapcsolat1);
  MySqlCommand command2 = new MySqlCommand("Drop DATABASE if exists --adatbázis neve--;", serverKapcsolat1);
 
- MySqlConnection serverKapcsolat2 = new MySqlConnection("Server = 127.0.0.1;Database = --adatbázis neve--;UserID =root; Password = \"\"");
+ MySqlConnection serverKapcsolat2 = new MySqlConnection("Server = 127.0.0.1;Database = "--adatbázis neve--";UserID =root; Password = \"\"");
  MySqlCommand command3 = new MySqlCommand(File.ReadAllText("--Amit be akarunk rakni az adatbázisba--"), serverKapcsolat2);
 
  serverKapcsolat1.Open();
