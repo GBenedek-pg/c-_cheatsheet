@@ -1,0 +1,30 @@
+ MySqlConnection serverKapcsolat1 = new MySqlConnection("Server = 127.0.0.1;UserID =root; Password = \"\"");
+ MySqlCommand command = new MySqlCommand("CREATE DATABASE if not exists --adatbázis neve--;", serverKapcsolat1);
+ MySqlCommand command2 = new MySqlCommand("Drop DATABASE if exists --adatbázis neve--;", serverKapcsolat1);
+
+ MySqlConnection serverKapcsolat2 = new MySqlConnection("Server = 127.0.0.1;Database = --adatbázis neve--;UserID =root; Password = \"\"");
+ MySqlCommand command3 = new MySqlCommand(File.ReadAllText("--Amit be akarunk rakni az adatbázisba--"), serverKapcsolat2);
+
+ serverKapcsolat1.Open();
+ command2.ExecuteNonQuery();
+ command.ExecuteNonQuery();
+ var lekerdezes1 = serverKapcsolat1.CreateCommand();
+
+ 
+ serverKapcsolat2.Open();
+ command3.ExecuteNonQuery();
+ var lekerdezes2 = serverKapcsolat2.CreateCommand();
+
+
+ //3.feladat
+ lekerdezes2.CommandText = $"--valamilyen lekérdezés--";
+
+ var olvaso = lekerdezes2.ExecuteReader();
+ while (olvaso.Read())
+ {
+     Console.WriteLine($"--feladat kiírása/megoldása (szintaxis pl: {olvaso.GetInt32(0)}...valamilyen szöveg)--");
+ }
+ olvaso.Close();
+
+  serverKapcsolat1.Close( );
+  serverKapcsolat2.Close( );
